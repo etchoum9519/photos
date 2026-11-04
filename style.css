@@ -43,6 +43,7 @@ body::before {
   position: fixed;
   inset: -30%;
   z-index: -1;
+   
   pointer-events: none;
 
   background:
@@ -149,10 +150,11 @@ header::before {
 }
 
 /* Footer */
-
+header,
+main,
 footer {
-  background: rgba(0,0,0,.12);
-  border-top-color: rgba(210,173,118,.15);
+  position: relative;
+  z-index: 1;
 }
 
 /* Accessibility: respect reduced motion */

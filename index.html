@@ -4,239 +4,541 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mon album photo</title>
+
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Galerie photographique personnelle – paysages, scènes et découvertes.">
+
+  <title>Mon album photo | Galerie</title>
 
   <link rel="stylesheet"
     href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --background: #101010;
+      --surface: #191919;
+      --text: #f5f2ec;
+      --muted: #99958d;
+      --accent: #c5a46d;
+      --border: rgba(255,255,255,.09);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
-      background: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* HEADER */
 
     header {
       text-align: center;
-      padding: 42px 16px 30px;
+      padding: 90px 20px 75px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 24px;
     }
 
     h1 {
-      font-size: clamp(26px, 5vw, 42px);
-      margin: 0 0 10px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: clamp(42px, 7vw, 76px);
+      letter-spacing: -1.5px;
+      margin: 0;
     }
 
-    header p { color: #bbb; }
+    header p {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: .5px;
+      margin-top: 20px;
+    }
 
-    .album {
-      columns: 3 240px;
-      column-gap: 12px;
-      padding: 12px;
+    .header-line {
+      width: 45px;
+      height: 1px;
+      background: var(--accent);
+      margin: 30px auto 0;
+    }
+
+    /* MAIN */
+
+    main {
       max-width: 1500px;
       margin: auto;
+      padding: 30px 35px 80px;
     }
 
-    .album a {
+    .album-category {
+      margin: 55px 0 85px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 27px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-number {
+      display: block;
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 9px;
+    }
+
+    .category-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(27px, 4vw, 38px);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    .category-count {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    /* MASONRY GALLERY */
+
+    .album-grid {
+      columns: 3 260px;
+      column-gap: 17px;
+    }
+
+    .album-grid a {
+      position: relative;
       display: block;
       break-inside: avoid;
-      margin-bottom: 12px;
+      margin-bottom: 17px;
       overflow: hidden;
-      border-radius: 5px;
+      border-radius: 3px;
+      background: var(--surface);
+      text-decoration: none;
+      outline-offset: 4px;
     }
 
-    .album img {
+    .album-grid img {
       display: block;
       width: 100%;
       height: auto;
-      transition: transform .3s ease;
+      transition:
+        transform .65s cubic-bezier(.2,.7,.2,1),
+        filter .65s ease;
     }
 
-    .album a:hover img {
-      transform: scale(1.035);
+    .album-grid a::after {
+      content: "";
+      position: absolute;
+      inset: 35% 0 0;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(0,0,0,.38)
+      );
+      opacity: .55;
+      transition: opacity .4s ease;
+      pointer-events: none;
     }
+
+    .album-grid a:hover img {
+      transform: scale(1.045);
+      filter: brightness(.83);
+    }
+
+    .album-grid a:hover::after {
+      opacity: 1;
+    }
+
+    .photo-caption {
+      position: absolute;
+      z-index: 2;
+      bottom: 16px;
+      left: 17px;
+      right: 12px;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .35s ease;
+    }
+
+    .album-grid a:hover .photo-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FOOTER */
 
     footer {
+      border-top: 1px solid var(--border);
       text-align: center;
-      color: #999;
-      padding: 30px 12px;
-      font-size: 13px;
+      padding: 38px 15px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
     }
+
+    footer span {
+      color: var(--accent);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 650px) {
+
+      header {
+        padding: 65px 18px 55px;
+      }
+
+      main {
+        padding: 15px 16px 50px;
+      }
+
+      .album-category {
+        margin: 45px 0 60px;
+      }
+
+      .album-grid {
+        columns: 2 140px;
+        column-gap: 10px;
+      }
+
+      .album-grid a {
+        margin-bottom: 10px;
+      }
+
+      .category-header {
+        margin-bottom: 20px;
+      }
+
+      .photo-caption {
+        opacity: 1;
+        transform: none;
+        font-size: 10px;
+        bottom: 10px;
+        left: 10px;
+      }
+    }
+
+    @media (hover: none) {
+      .photo-caption {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+
   <header>
+    <div class="eyebrow">Collection photographique</div>
+
     <h1>Mes albums photos</h1>
-    <p>Quelques instants à partager</p>
+
+    <p>Des lieux, des instants et des perspectives.</p>
+
+    <div class="header-line"></div>
   </header>
 
+
   <main>
-    <div class="album" id="gallery">
 
-      <a href="IMG_1165.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1165.JPG"
-               alt="A"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1171.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1171.JPG"
-               alt="Le pont"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1179.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1179.JPG"
-               alt="Le soleil se couche"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1121.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1121.JPG"
-               alt="L'horizon baignant"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1114.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1114.JPG"
-               alt="Lecture-Vision"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1110 2.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1110 2.JPG"
-               alt="La scène"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_1004.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_1004.JPG"
-               alt="La cloche"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_0999.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0999.JPG"
-               alt="La scène2"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_0916.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0916.JPG"
-               alt="Nuit étoilée"
-               loading="lazy">
-      </a>
-
-        <a href="IMG_0895.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0895.JPG"
-               alt="Chemin de fer"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_0699.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0699.JPG"
-               alt="Saveurs du Cameroun"
-               loading="lazy">
-      </a>
-
-      <a href="IMG_0676.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0676.JPG"
-               alt="Soleil couchant yaounde"
-               loading="lazy">
-      </a>
+    <div id="gallery">
 
 
-      <a href="IMG_0491.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0491.JPG"
-               alt="La boue"
-               loading="lazy">
-      </a>
+      <!-- CATÉGORIE 01 -->
+
+      <section class="album-category">
+
+        <div class="category-header">
+          <div>
+            <span class="category-number">01 / COLLECTION</span>
+            <h2>Lumières & paysages</h2>
+          </div>
+
+          <span class="category-count">05 photographies</span>
+        </div>
+
+        <div class="album-grid">
+
+          <a href="IMG_1165.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1165.JPG"
+                 alt="Paysage photographique"
+                 loading="lazy">
+
+            <span class="photo-caption">Paysage</span>
+          </a>
 
 
-      <a href="IMG_0481.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0481.JPG"
-               alt="Wiesbaden la capitale"
-               loading="lazy">
-      </a>
+          <a href="IMG_1171.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1171.JPG"
+                 alt="Le pont"
+                 loading="lazy">
+
+            <span class="photo-caption">Le pont</span>
+          </a>
 
 
-      <a href="IMG_0308.JPG"
-         data-pswp-width="1200"
-         data-pswp-height="800"
-         target="_blank">
-      
-          <img src="IMG_0308.JPG"
-               alt="Vaangohg1"
-               loading="lazy">
-      </a>
+          <a href="IMG_1179.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
 
-      
+            <img src="IMG_1179.JPG"
+                 alt="Le soleil se couche"
+                 loading="lazy">
+
+            <span class="photo-caption">L'heure dorée</span>
+          </a>
+
+
+          <a href="IMG_1121.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1121.JPG"
+                 alt="L'horizon baignant"
+                 loading="lazy">
+
+            <span class="photo-caption">L'horizon</span>
+          </a>
+
+
+          <a href="IMG_1114.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1114.JPG"
+                 alt="Lecture et vision"
+                 loading="lazy">
+
+            <span class="photo-caption">Lecture & vision</span>
+          </a>
+
+        </div>
+      </section>
+
+
+
+      <!-- CATÉGORIE 02 -->
+
+      <section class="album-category">
+
+        <div class="category-header">
+          <div>
+            <span class="category-number">02 / COLLECTION</span>
+            <h2>Scènes & instants</h2>
+          </div>
+
+          <span class="category-count">05 photographies</span>
+        </div>
+
+        <div class="album-grid">
+
+          <a href="IMG_1110 2.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1110 2.JPG"
+                 alt="La scène"
+                 loading="lazy">
+
+            <span class="photo-caption">La scène</span>
+          </a>
+
+
+          <a href="IMG_1004.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_1004.JPG"
+                 alt="La cloche"
+                 loading="lazy">
+
+            <span class="photo-caption">La cloche</span>
+          </a>
+
+
+          <a href="IMG_0999.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0999.JPG"
+                 alt="La scène"
+                 loading="lazy">
+
+            <span class="photo-caption">Un instant</span>
+          </a>
+
+
+          <a href="IMG_0916.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0916.JPG"
+                 alt="Nuit étoilée"
+                 loading="lazy">
+
+            <span class="photo-caption">Nuit étoilée</span>
+          </a>
+
+
+          <a href="IMG_0895.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0895.JPG"
+                 alt="Chemin de fer"
+                 loading="lazy">
+
+            <span class="photo-caption">Chemin de fer</span>
+          </a>
+
+        </div>
+      </section>
+
+
+
+      <!-- CATÉGORIE 03 -->
+
+      <section class="album-category">
+
+        <div class="category-header">
+          <div>
+            <span class="category-number">03 / COLLECTION</span>
+            <h2>Regards & découvertes</h2>
+          </div>
+
+          <span class="category-count">05 photographies</span>
+        </div>
+
+        <div class="album-grid">
+
+          <a href="IMG_0699.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0699.JPG"
+                 alt="Saveurs du Cameroun"
+                 loading="lazy">
+
+            <span class="photo-caption">Saveurs du Cameroun</span>
+          </a>
+
+
+          <a href="IMG_0676.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0676.JPG"
+                 alt="Soleil couchant à Yaoundé"
+                 loading="lazy">
+
+            <span class="photo-caption">Yaoundé au crépuscule</span>
+          </a>
+
+
+          <a href="IMG_0491.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0491.JPG"
+                 alt="La boue"
+                 loading="lazy">
+
+            <span class="photo-caption">Textures & matières</span>
+          </a>
+
+
+          <a href="IMG_0481.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0481.JPG"
+                 alt="Wiesbaden, la capitale"
+                 loading="lazy">
+
+            <span class="photo-caption">Wiesbaden</span>
+          </a>
+
+
+          <a href="IMG_0308.JPG"
+             data-pswp-width="1200"
+             data-pswp-height="800"
+             target="_blank">
+
+            <img src="IMG_0308.JPG"
+                 alt="Van Gogh"
+                 loading="lazy">
+
+            <span class="photo-caption">Van Gogh</span>
+          </a>
+
+        </div>
+      </section>
+
 
     </div>
   </main>
 
+
   <footer>
-    © Mon album photo
+    © MON ALBUM PHOTO <span>·</span> COLLECTION PERSONNELLE
   </footer>
+
+
+  <!-- PHOTOSWIPE : CONFIGURATION CONSERVÉE -->
 
   <script type="module">
     import PhotoSwipeLightbox from
@@ -251,5 +553,6 @@
 
     lightbox.init();
   </script>
+
 </body>
 </html>

@@ -1,0 +1,170 @@
+
+/* =========================================
+   CINEMATIC ATMOSPHERIC BACKGROUND
+   ========================================= */
+
+:root {
+  --background: #090d12;
+  --surface: #151a20;
+  --text: #f5f2ec;
+  --muted: #a6a6a6;
+  --accent: #d2ad76;
+  --border: rgba(255,255,255,.10);
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 15%,
+      rgba(24, 85, 91, .24),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 85% 35%,
+      rgba(89, 58, 96, .19),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 50% 85%,
+      rgba(144, 103, 53, .13),
+      transparent 45%
+    ),
+    #090d12;
+}
+
+/* Animated ambient light */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(30, 130, 125, .15),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 70% 55%,
+      rgba(116, 78, 135, .13),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(195, 147, 83, .09),
+      transparent 27%
+    );
+
+  filter: blur(65px);
+
+  animation: ambientMovement 20s ease-in-out infinite alternate;
+}
+
+@keyframes ambientMovement {
+  0% {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+
+  100% {
+    transform: translate3d(-1%, 4%, 0) scale(1.03);
+  }
+}
+
+/* Header atmospheric depth */
+
+header {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.025),
+      transparent
+    );
+
+  border-bottom: 1px solid rgba(210,173,118,.18);
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  top: -330px;
+  left: calc(50% - 225px);
+
+  background: rgba(73, 132, 135, .16);
+  filter: blur(100px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Refined category dividers */
+
+.category-header {
+  border-bottom-color: rgba(210,173,118,.20);
+}
+
+/* Photography cards */
+
+.album-grid a {
+  border: 1px solid rgba(255,255,255,.055);
+  box-shadow: 0 8px 28px rgba(0,0,0,.22);
+
+  transition:
+    border-color .4s ease,
+    box-shadow .4s ease,
+    transform .4s ease;
+}
+
+.album-grid a:hover {
+  border-color: rgba(210,173,118,.42);
+  box-shadow:
+    0 15px 45px rgba(0,0,0,.38),
+    0 0 25px rgba(210,173,118,.07);
+
+  transform: translateY(-3px);
+}
+
+/* More refined typography */
+
+.eyebrow {
+  text-shadow: 0 0 20px rgba(210,173,118,.25);
+}
+
+.category-number {
+  text-shadow: 0 0 15px rgba(210,173,118,.25);
+}
+
+/* Footer */
+
+footer {
+  background: rgba(0,0,0,.12);
+  border-top-color: rgba(210,173,118,.15);
+}
+
+/* Accessibility: respect reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+
+  .album-grid a,
+  .album-grid img,
+  .photo-caption {
+    transition: none;
+  }
+}
